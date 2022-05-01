@@ -1,0 +1,26 @@
+#' Table of all champions and their base statistics (as of 5/1/22).
+#'
+#' @format A data frame with 161 rows and 19 variables:
+#' \describe{
+#'  \item{Champions}{name of champion}
+#'  \item{HP}{base health points of a champion}
+#'  \item{HP+}{how much maximum health a champion gains per level}
+#'  \item{HP5}{how much health is regenerated per second when below maximum}
+#'  \item{HP5+}{increase of health regeneration per level}
+#'  \item{MP}{base mana points of a champion}
+#'  \item{MP+}{how much maximum mana a champion gains per level}
+#'  \item{MP5}{how much mana is regenerated per second when below maximum}
+#'  \item{MP5+}{increase of mana regeneration per level}
+#'  \item{AD}{base attack damage of a champion}
+#'  \item{AD+}{increase of attack damage per level}
+#'  \item{AS}{base attack speed ratio of a champion}
+#'  \item{AS+}{increase of attack speed per level}
+#'  \item{AR}{base armor level of champion}
+#'  \item{AR+}{increase in armor per level}
+#'  \item{MR}{base magic resistance of a champion}
+#'  \item{MR+}{increase in magic resistance per level}
+#'  \item{MS}{base movement speed of a champion}
+#'  \item{Range}{base attack range of a champion}
+#'  }
+#'  @source \url{https://leagueoflegends.fandom.com/wiki/List_of_champions/Base_statistics}
+  "testData"

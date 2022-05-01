@@ -1,0 +1,25 @@
+Package: lolspotr
+Type: Package
+Title: League of Legends Statistic Calculators
+Version: 0.1
+Date: 2022-05-01
+Author: Albert Brigino <abrigino@usf.edu>
+Maintainer: <abrigino@usf.edu>
+Description: Simplifies League of Legends statistic calculations
+    into separate, easily-accessible functions (as described by Riot Games).
+    Takes inputs regarding stats provided from in-game abilities,
+    masteries and items and returns calculated statistic.
+Depends: R (>= 4.0) 
+Imports: 
+    rvest,
+    magrittr
+License: CC0
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.2
+Suggests: 
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+VignetteBuilder: knitr
+Config/testthat/edition: 3

@@ -1,0 +1,140 @@
+---
+title: "lolspotr_functions"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{lolspotr_functions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(lolspotr)
+```
+
+# lolspotr
+
+The purpose of this package is to aid in statistical calculations for the game League of Legends.This package focuses on in-game stats as opposed to champion and summoner performance.By simplifying stat calculations into usable R functions, useful information and comparisons can be made for different champion builds as well as item-to-item and skill-to-item interactions. 
+
+Future updates will include ways to import champion ability and item stats directly into R, with champion base stats already accessible through the lolscrape() function. Certain functions are already set to throw an error if an invalid value has been placed, coinciding with the limitations set in place by the developers. Note that invalid in this case =/= non-existant values, as a way to also check theoretical values that may not yet be present in-game (Public test server values, etc.).
+
+
+## lolscrape()
+
+lolscrape() is a function designed to create a table containing all current champion base statistics in League of Legends as well as how certain stats scale with level. This is done through scraping the League of Legends wiki which is kept up to date.Data is collected this way as to not require the user of this package to have their own Riot API key in order to get basic champion information. This allows for faster viewing within the R environment.
+
+```{r lolscrape}
+#example usage
+
+champData <- lolscrape()
+```
+
+## aSpeed()
+
+aSpeed() serves as this package's attack speed calculator. This function takes the base attack speed ratio of a champion and calculates the total attack speed when modified with values given from items, levels, masteries and skills. For the purpose of practicality, valid calculation of this stat is returned when the total attack speed value is higher than 0 and less than 2.5, as this is the limit of attack speed of any given character, barring extremely special cases. Negative modifiers may be used as well for the sake of calculating attack speed when debuffed by enemies or other circumstance. 
+
+```{r aSpeed}
+#example usage
+
+aSpeed(.75,.25,.3,.25)
+aSpeed(.638,.4,.25,.25,.3)
+
+#example incorrect usage
+
+##aSpeed(-.665,.5,.3)
+
+```
+
+## cdReduction()
+
+This function calculates the total cool down reduction of champion abilities given a certain level of haste. Previously, cool down reduction (cdr) was easier to calculate as items and masteries gave flat cdr. With the introduction of haste, cdr has been made a bit more complicated to calculate.
+
+```{r cdReduction}
+#example usage
+
+cdReduction(20,25,25)
+cdReduction(12,15)
+
+#example incorrect usage
+
+##cdReduction(-15,-3)
+
+```
+
+## lethCalc()
+
+Calculates flat armor penetration from total lethality. Lethality is a separate statistic from normal flat armor penetration in that its effectiveness scales with level, meaning that a champion at level 18 would benefit the most from lethality whereas a champion at level 6 would only get partial effectiveness. This function only takes two inputs: total lethality (sum of all lethality items/masteries) and level.
+
+```{r lethCalc}
+#example usage
+
+lethCalc(30,6)
+lethCalc(30,18)
+
+#example incorrect usage
+
+##lethCalc(30, 19)
+##lethCalc(-15, 13)
+
+```
+
+## mSpeed()
+
+Movement speed calculator which utilizes three different types of variables: base movement speed, flat movement speed modifier, and percent movement speed modifier. For most calculations, flat movement speed modifiers usually total around 1 (boots) whereas most modifiers in the game are percentage-based. Movement speed is represented in the amount of units a champion may travel per second.Total movement speed after modifiers cannot be below zero.
+
+```{r mSpeed}
+#example usage
+
+mSpeed(325, 45, .07, .07)
+mSpeed(330, 25, .06)
+
+#example incorrect usage
+
+##mSpeed(-325, 45, .3)
+##mSpeed(340, 45, -1.3)
+
+```
+
+## pPenCalc()
+
+This function calculates percent armor penetration. Percent armor penetration bonuses are stack multiplicatively. This function can take any number of bonuses.
+
+```{r pPenCalc}
+#example usage
+
+pPenCalc(.25,.12,.5)
+pPenCalc(.1,.3)
+
+#example incorrect usage
+
+##pPenCalc(.25,.5,.51)
+
+```
+
+## pRedCalc()
+
+As opposed to pPenCalc(), this function instead calculates percent armor reduction. The difference between the two is that percent armor reduction applies to the enemy champion as opposed to percent penetration which only affects the attacking champion. This means that other sources of damage will benefit from pRed as opposed to pPen by decreasing targeted champion armor. Also unlike pPenCalc(), this function only takes two inputs: champion ability and Black Cleaver stack level.
+
+* Champion ability (champAbility): Percent armor reduction dealt my a champion's specific ability.
+
+* Black Cleaver (BC): Amount of black cleaver stacks currently being applied. Black cleaver is the only other source of percent armor reduction currently available in the game besides champion abilities. Stack count ranges from 0-6. 
+
+```{r pRedCalc}
+#example usage
+
+pRedCalc(.2,2)
+pRedCalc(.1,6)
+
+#example incorrect usage
+
+##pRedCalc(.4,0,0)
+##pRedCalc(.3,7)
+##pRedCalc(1.1,3)
+
+```
